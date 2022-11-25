@@ -37,6 +37,9 @@ param cloudInit string = '''
 @description('Create a new public IP or not')
 param publicIp bool = true
 
+@description('Private IP Address')
+param PrivateIp string = ''
+
 @description('Resource ID of user managed identity or set to blank emtpy string')
 param userIdentityResourceId string = ''
 
@@ -84,7 +87,11 @@ resource nic 'Microsoft.Network/networkInterfaces@2021-02-01' = {
          properties: {
             subnet: {
               id: subnetId
+
             }
+            privateIPAddressVersion: 'IPv4'
+            privateIPAllocationMethod: PrivateIp != ''? 'Static' : 'Dynamic'
+            privateIPAddress: PrivateIp != '' ? PrivateIp : null
             publicIPAddress: publicIp || existingPipId != '' ? pipConfig : null
             loadBalancerBackendAddressPools: loadBalancerBackendPoolId != '' ?  [ 
               loadBalancerPoolConfig 

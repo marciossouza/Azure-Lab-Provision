@@ -65,6 +65,9 @@ module snetADFS 'modules/network/subnet.bicep' = {
     nsgId: subnetNsg.outputs.nsgId
     addressPrefix: '10.200.1.0/24'
   }
+  dependsOn: [
+    network
+  ]
 
 }
 
@@ -77,6 +80,9 @@ module snetADConnect 'modules/network/subnet.bicep' = {
     nsgId: subnetNsg.outputs.nsgId
     addressPrefix: '10.200.2.0/24'
   }
+  dependsOn:[
+    network
+  ]
 
 }
 
@@ -90,6 +96,7 @@ module DomainController 'modules/compute/win2019-vm.bicep' = {
     subnetId: network.outputs.subnetId
     adminPasswordOrKey: adminPasswordOrKey
     publicIp: true
+    PrivateIp: '10.200.0.4'
     size: size
     adminUser: adminUser
     userIdentityResourceId: assignManagedIdentity ? managedIdentity.outputs.resourceId : ''
@@ -105,8 +112,11 @@ module shutdownDC 'modules/misc/autoshutdown.bicep' = {
     location: location
     targetVmId: DomainController.outputs.vmID
     shutdownTime: '2300'
+    timeZone: 'Bahia Standard Time'
   }
-  
+  dependsOn:[
+    DomainController
+  ]
 }
 
 module ADFS 'modules/compute/win2019-vm.bicep' = {
@@ -119,10 +129,14 @@ module ADFS 'modules/compute/win2019-vm.bicep' = {
     subnetId: snetADFS.outputs.subnetId
     adminPasswordOrKey: adminPasswordOrKey
     publicIp: true
+    PrivateIp: '10.200.1.4'
     size: size
     adminUser: adminUser
     userIdentityResourceId: assignManagedIdentity ? managedIdentity.outputs.resourceId : ''
   }
+  dependsOn:[
+    snetADFS
+  ]
 }
 
 module shutdownADFS 'modules/misc/autoshutdown.bicep' = {
@@ -134,7 +148,11 @@ module shutdownADFS 'modules/misc/autoshutdown.bicep' = {
     location: location
     targetVmId: ADFS.outputs.vmID
     shutdownTime: '2300'
+    timeZone: 'Bahia Standard Time'
   }
+  dependsOn: [
+    ADFS
+  ]
   
 }
 
@@ -148,6 +166,7 @@ module ADConnect 'modules/compute/win2019-vm.bicep' = {
     subnetId: snetADConnect.outputs.subnetId
     adminPasswordOrKey: adminPasswordOrKey
     publicIp: true
+    PrivateIp: '10.200.2.4'
     size: size
     adminUser: adminUser
     userIdentityResourceId: assignManagedIdentity ? managedIdentity.outputs.resourceId : ''
@@ -163,8 +182,11 @@ module shutdownADConnect 'modules/misc/autoshutdown.bicep' = {
     location: location
     targetVmId: ADConnect.outputs.vmID
     shutdownTime: '2300'
+    timeZone: 'Bahia Standard Time'
   }
-  
+  dependsOn:[
+    ADConnect
+  ]
 }
 
 module managedIdentity 'modules/identity/user-managed.bicep' = if (assignManagedIdentity) {
