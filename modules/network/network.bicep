@@ -6,7 +6,7 @@ param name string = resourceGroup().name
 param location string = resourceGroup().location
 
 @description('Address space for the virtual network, in CIDR format')
-param addressSpace string = '10.0.0.0/8'
+param addressSpace string = '10.200.0.0/22'
 
 @description('Address range for the default subnet, in CIDR format')
 param defaultSubnetCidr string = '10.200.0.0/24'
