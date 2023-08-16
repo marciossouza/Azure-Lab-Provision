@@ -110,7 +110,7 @@ module DomainController1 'modules/compute/win2022-vm.bicep' = {
     name: 'DC01'
     subnetId: netSP.outputs.subnetId
     adminPasswordOrKey: adminPasswordOrKey
-    publicIp: true
+    publicIp: false
     PrivateIp: '10.100.1.4'
     size: size
     adminUser: adminUser
@@ -142,7 +142,7 @@ module DomainController2 'modules/compute/win2022-vm.bicep' = {
     name: 'DC02'
     subnetId: netSP.outputs.subnetId
     adminPasswordOrKey: adminPasswordOrKey
-    publicIp: true
+    publicIp: false
     PrivateIp: '10.100.1.5'
     size: size
     adminUser: adminUser
@@ -175,7 +175,7 @@ module DomainController3 'modules/compute/win2022-vm.bicep' = {
     name: 'DC03'
     subnetId: netMG.outputs.subnetId
     adminPasswordOrKey: adminPasswordOrKey
-    publicIp: true
+    publicIp: false
     PrivateIp: '10.200.1.4'
     size: size
     adminUser: adminUser
@@ -210,7 +210,7 @@ module FileServer 'modules/compute/win2022-vm.bicep' = {
     name: 'FileServer'
     subnetId: netSP.outputs.subnetId
     adminPasswordOrKey: adminPasswordOrKey
-    publicIp: true
+    publicIp: false
     PrivateIp: '10.100.1.10'
     size: size
     adminUser: adminUser
@@ -247,7 +247,7 @@ module TerminalServer 'modules/compute/win2022-vm.bicep' = {
     name: 'TerminalServer'
     subnetId: netSP.outputs.subnetId
     adminPasswordOrKey: adminPasswordOrKey
-    publicIp: true
+    publicIp: false
     PrivateIp: '10.100.1.12'
     size: size
     adminUser: adminUser
@@ -284,7 +284,7 @@ module WebServer 'modules/compute/win2022-vm.bicep' = {
     name: 'WebServer'
     subnetId: netMG.outputs.subnetId
     adminPasswordOrKey: adminPasswordOrKey
-    publicIp: true
+    publicIp: false
     PrivateIp: '10.200.1.12'
     size: size
     adminUser: adminUser
