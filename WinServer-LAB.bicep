@@ -238,6 +238,79 @@ module shutdownFS 'modules/misc/autoshutdown.bicep' = {
   
 }
 
+module TerminalServer 'modules/compute/win2022-vm.bicep' = {
+  scope: resGroup
+  name: 'TerminalServer'
+
+  params: {
+    location: location
+    name: 'TerminalServer'
+    subnetId: netSP.outputs.subnetId
+    adminPasswordOrKey: adminPasswordOrKey
+    publicIp: true
+    PrivateIp: '10.100.1.12'
+    size: size
+    adminUser: adminUser
+    userIdentityResourceId: assignManagedIdentity ? managedIdentity.outputs.resourceId : ''
+  }
+  dependsOn:[
+    netSP
+  ]
+}
+
+module shutdownTS 'modules/misc/autoshutdown.bicep' = {
+  scope: resGroup
+  name: 'autoshutdown-TS'
+
+  params: {
+    vmName: TerminalServer.name
+    location: location
+    targetVmId: TerminalServer.outputs.vmID
+    shutdownTime: '2300'
+    timeZone: 'Bahia Standard Time'
+  }
+  dependsOn: [
+    TerminalServer
+  ]
+  
+}
+
+module WebServer 'modules/compute/win2022-vm.bicep' = {
+  scope: resGroup
+  name: 'WebServer'
+
+  params: {
+    location: location
+    name: 'WebServer'
+    subnetId: netMG.outputs.subnetId
+    adminPasswordOrKey: adminPasswordOrKey
+    publicIp: true
+    PrivateIp: '10.200.1.12'
+    size: size
+    adminUser: adminUser
+    userIdentityResourceId: assignManagedIdentity ? managedIdentity.outputs.resourceId : ''
+  }
+  dependsOn:[
+    netMG
+  ]
+}
+
+module shutdownWEB 'modules/misc/autoshutdown.bicep' = {
+  scope: resGroup
+  name: 'autoshutdown-WEB'
+
+  params: {
+    vmName: WebServer.name
+    location: location
+    targetVmId: WebServer.outputs.vmID
+    shutdownTime: '2300'
+    timeZone: 'Bahia Standard Time'
+  }
+  dependsOn: [
+    WebServer
+  ]
+  
+}
 
 module managedIdentity 'modules/identity/user-managed.bicep' = if (assignManagedIdentity) {
   scope: resGroup
@@ -264,6 +337,14 @@ output DC3dnsName string = DomainController3.outputs.dnsName
 output FSprivateIp string = FileServer.outputs.privateIp
 output FSpublicIp string = FileServer.outputs.publicIP
 output FSdnsName string = FileServer.outputs.dnsName
+
+output TSprivateIp string = TerminalServer.outputs.privateIp
+output TSpublicIp string = TerminalServer.outputs.publicIP
+output TSdnsName string = TerminalServer.outputs.dnsName
+
+output WEBprivateIp string = WebServer.outputs.privateIp
+output WEBpublicIp string = WebServer.outputs.publicIP
+output WEBdnsName string = WebServer.outputs.dnsName
 
 
 
