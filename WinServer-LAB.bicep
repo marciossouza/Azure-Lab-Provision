@@ -312,6 +312,80 @@ module shutdownWEB 'modules/misc/autoshutdown.bicep' = {
   
 }
 
+module Desk1 'modules/compute/win11-vm.bicep' = {
+  scope: resGroup
+  name: 'Desk1'
+
+  params: {
+    location: location
+    name: 'Desk1'
+    subnetId: netSP.outputs.subnetId
+    adminPasswordOrKey: adminPasswordOrKey
+    publicIp: true
+    PrivateIp: '10.100.1.20'
+    size: size
+    adminUser: adminUser
+    userIdentityResourceId: assignManagedIdentity ? managedIdentity.outputs.resourceId : ''
+  }
+  dependsOn:[
+    netSP
+  ]
+}
+
+module shutdownDesk1 'modules/misc/autoshutdown.bicep' = {
+  scope: resGroup
+  name: 'autoshutdown-Desk1'
+
+  params: {
+    vmName: Desk1.name
+    location: location
+    targetVmId: Desk1.outputs.vmID
+    shutdownTime: '2300'
+    timeZone: 'Bahia Standard Time'
+  }
+  dependsOn: [
+    Desk1
+  ]
+  
+}
+
+module Desk2 'modules/compute/win11-vm.bicep' = {
+  scope: resGroup
+  name: 'Desk2'
+
+  params: {
+    location: location
+    name: 'Desk2'
+    subnetId: netMG.outputs.subnetId
+    adminPasswordOrKey: adminPasswordOrKey
+    publicIp: true
+    PrivateIp: '10.200.1.20'
+    size: size
+    adminUser: adminUser
+    userIdentityResourceId: assignManagedIdentity ? managedIdentity.outputs.resourceId : ''
+  }
+  dependsOn:[
+    netMG
+  ]
+}
+
+module shutdownDesk2 'modules/misc/autoshutdown.bicep' = {
+  scope: resGroup
+  name: 'autoshutdown-Desk2'
+
+  params: {
+    vmName: Desk2.name
+    location: location
+    targetVmId: Desk2.outputs.vmID
+    shutdownTime: '2300'
+    timeZone: 'Bahia Standard Time'
+  }
+  dependsOn: [
+    Desk2
+  ]
+  
+}
+
 module managedIdentity 'modules/identity/user-managed.bicep' = if (assignManagedIdentity) {
   scope: resGroup
   params:{ 

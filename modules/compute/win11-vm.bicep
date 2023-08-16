@@ -17,8 +17,8 @@ param osDiskType string = 'StandardSSD_LRS'
 @description('Image to be deployed')
 param imageRef object = {
   publisher: 'MicrosoftWindowsDesktop'
-  offer: 'windows11preview-arm64'
-  sku: 'win11-22h2-ent'
+  offer: 'windows11preview'
+  sku: 'win11-22h2-pro'
   version: 'latest'
 }
 
