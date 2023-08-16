@@ -396,29 +396,13 @@ module managedIdentity 'modules/identity/user-managed.bicep' = if (assignManaged
 
 // ===== Outputs ==========================az==================================
 
-output DC1privateIp string = DomainController1.outputs.privateIp
-output DC1publicIp string = DomainController1.outputs.publicIP
-output DC1dnsName string = DomainController1.outputs.dnsName
+output Desk1privateIp string = Desk1.outputs.privateIp
+output Desk1publicIp string = Desk1.outputs.publicIP
+output Desk1dnsName string = Desk1.outputs.dnsName
 
-output DC2privateIp string = DomainController2.outputs.privateIp
-output DC2publicIp string = DomainController2.outputs.publicIP
-output DC2dnsName string = DomainController2.outputs.dnsName
-
-output DC3privateIp string = DomainController3.outputs.privateIp
-output DC3publicIp string = DomainController3.outputs.publicIP
-output DC3dnsName string = DomainController3.outputs.dnsName
-
-output FSprivateIp string = FileServer.outputs.privateIp
-output FSpublicIp string = FileServer.outputs.publicIP
-output FSdnsName string = FileServer.outputs.dnsName
-
-output TSprivateIp string = TerminalServer.outputs.privateIp
-output TSpublicIp string = TerminalServer.outputs.publicIP
-output TSdnsName string = TerminalServer.outputs.dnsName
-
-output WEBprivateIp string = WebServer.outputs.privateIp
-output WEBpublicIp string = WebServer.outputs.publicIP
-output WEBdnsName string = WebServer.outputs.dnsName
+output Desk2privateIp string = Desk2.outputs.privateIp
+output Desk2publicIp string = Desk2.outputs.publicIP
+output Desk2dnsName string = Desk2.outputs.dnsName
 
 
 
