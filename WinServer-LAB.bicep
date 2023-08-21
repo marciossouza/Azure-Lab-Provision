@@ -58,20 +58,6 @@ module netSP 'modules/network/network.bicep' = {
   }
 }
 
-// module snetSP 'modules/network/subnet.bicep' = {
-//   scope: resGroup
-//   name: 'Server-Subnet'
-//   params:{
-//     name: 'Server-Subnet'
-//     vnetName: netSP.name
-//     nsgId: subnetNsg.outputs.nsgId
-//     addressPrefix: '10.100.2.0/24'
-//   }
-//   dependsOn: [
-//     netSP
-//   ]
-// }
-
 module netMG 'modules/network/network.bicep' = {
   scope: resGroup
   name: 'MG-LAB-VNET'
@@ -85,20 +71,28 @@ module netMG 'modules/network/network.bicep' = {
   }
 }
 
-// module snetMG 'modules/network/subnet.bicep' = {
-//   scope: resGroup
-//   name: 'MG-Subnet'
-//   params:{
-//     name: 'MG-Subnet'
-//     vnetName: netMG.name
-//     nsgId: subnetNsg.outputs.nsgId
-//     addressPrefix: '10.200.2.0/24'
-//   }
-//   dependsOn: [
-//     netMG
-//   ]
+// Peering
+//targetScope = 'resourceGroup'
 
-// }
+module peerFirstVnetSecondVnet 'modules/network/peering.bicep' = {
+  name: 'SP-MG'
+  scope: resourceGroup(resGroup.name)
+  params: {
+    existingLocalVirtualNetworkName: netSP.name
+    existingRemoteVirtualNetworkName: netMG.name
+    existingRemoteVirtualNetworkResourceGroupName: resGroup.name
+  }
+}
+
+module peerSecondVnetFirstVnet 'modules/network/peering.bicep' = {
+  name: 'MG-SP'
+  scope:  resourceGroup(resGroup.name)
+  params: {
+    existingLocalVirtualNetworkName: netMG.name
+    existingRemoteVirtualNetworkName: netSP.name
+    existingRemoteVirtualNetworkResourceGroupName: resGroup.name
+  }
+}
 
 // Domain Controllers
 module DomainController1 'modules/compute/win2022-vm.bicep' = {
